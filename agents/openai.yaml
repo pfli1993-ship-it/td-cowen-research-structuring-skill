@@ -1,0 +1,6 @@
+interface:
+  display_name: "TD Cowen研报结构化skill"
+  short_description: "将 TD Cowen Therapeutic Outlook 研报结构化为中文赛马图长图"
+  default_prompt: "Use $structure-td-cowen-therapeutic-outlook to turn this TD Cowen Therapeutic Categories Outlook PDF into a Chinese therapeutic landscape long image."
+policy:
+  allow_implicit_invocation: true

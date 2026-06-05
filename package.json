@@ -1,0 +1,10 @@
+{
+  "name": "td-cowen-research-structuring-skill",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TD Cowen研报结构化skill：将 Therapeutic Categories Outlook PDF 转换为中文治疗格局长图。",
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.52.0"
+  }
+}

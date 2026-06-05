@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*.pdf
+*.json
+*.html
+*.png
+.DS_Store
+
