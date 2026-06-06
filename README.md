@@ -58,6 +58,7 @@ Skill 的标准流程为：
 
 - Python 3.10+
 - [`pypdf`](https://pypi.org/project/pypdf/)
+- [`futu-api`](https://pypi.org/project/futu-api/) 与正在运行的 Futu OpenD（用于可选公司行情模块）
 - Node.js 18+
 - Playwright，或 Codex bundled runtime 中的 Playwright
 - Chrome 或 Playwright 可用浏览器
@@ -76,6 +77,7 @@ npx playwright install chromium
 
 ```bash
 python3 scripts/extract_outlook.py report.pdf --output report.json
+python3 scripts/fetch_futu_market_data.py 'Biogen=US.BIIB' 'Acadia=US.ACAD' --output futu_market_data.json
 python3 scripts/validate_outlook.py report.json --require-chinese
 python3 scripts/render_outlook.py report.json --output structured_report.html
 node scripts/export_long_images.mjs structured_report.html

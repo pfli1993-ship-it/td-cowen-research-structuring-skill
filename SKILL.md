@@ -18,6 +18,8 @@ description: 将 TD Cowen / TD Securities Therapeutic Categories Outlook 系列 
    - Translate and rewrite the final long-image content in concise Simplified Chinese. Do not render the extractor's English draft directly.
    - Chinese is mandatory for `disease_intro`, `epidemiology`, `treatment_landscape`, `key_trends`, `risks`, `cowen_view`, `key_data`, and `catalyst`.
    - Keep drug names, company names, trial names, mechanism abbreviations, regulatory abbreviations, and explicit timing expressions in English where appropriate.
+   - When the user asks for charts, fill `epidemiology_chart` and `treatment_landscape_chart`; the renderer will display these sections as charts instead of plain cards.
+   - When the user asks for current company market data, use `scripts/fetch_futu_market_data.py` and store results under candidate `market_data`. Keep quote time and Futu source visible because this data is current, unlike the report cutoff.
    - For broad reports containing multiple sub-indications, summarize the major sub-indications in `sub_indications`, then select candidates across them.
    - If a broad report has no consolidated `R&D Pipeline` table, use the detected `sub_indications` as search anchors and build `pipeline_candidates` from explicit body evidence before selecting 5-6 projects.
    - Select 5-6 active candidates. Prioritize positive or strategically important Cowen commentary, then clear catalysts, body coverage, and later stage.
@@ -30,6 +32,7 @@ description: 将 TD Cowen / TD Securities Therapeutic Categories Outlook 系列 
    - Run `scripts/render_outlook.py <json> --output structured_report_<topic>.html`.
    - The race chart must use `Preclinical → Phase I → Phase II → Phase III → NDA/BLA → Marketed`.
    - Show the report cutoff prominently and emphasize catalyst timing.
+   - If `market_data` exists, show market cap, latest price, and YTD change in the race chart row.
 
 4. Export and open.
    - Run `node scripts/export_long_images.mjs <html>`.
@@ -50,5 +53,6 @@ description: 将 TD Cowen / TD Securities Therapeutic Categories Outlook 系列 
 - Confirm selected candidates are active and have company, product, stage, Cowen evidence, and source pages.
 - Confirm every catalyst time is either explicitly sourced or `未明确`.
 - Confirm all narrative fields intended for display are written in Simplified Chinese; English is limited to proper nouns and technical abbreviations.
+- Confirm any requested current market data is explicitly sourced to Futu and separated from the TD Cowen report cutoff.
 - Confirm the HTML contains all fixed modules and the report cutoff.
 - Confirm exported PNG is non-empty and exactly 1080 pixels wide.
