@@ -166,7 +166,7 @@ def main():
 </style></head><body><main class="page"><header><div class="eyebrow">TD COWEN · THERAPEUTIC CATEGORIES OUTLOOK</div><h1>{esc(report["topic"])}</h1><div class="subtitle">疾病格局、重点管线与关键催化剂赛马图</div><div class="cutoff">研报时点<br>{esc(report["report_date"])}</div></header>
 <h2>疾病简介</h2><div class="intro">{esc(intro.get("text",""))}<span class="source">{esc(pages(intro.get("source_pages")))}</span></div>
 {f'<h2>主要子适应症</h2><div class="pillbox">{"".join(f"<span class=pill>{esc(x)}</span>" for x in sub)}</div>' if sub else ''}
-<h2>流行病学与疾病负担</h2>{chart_bars(data.get("epidemiology_chart", [])) or f'<div class="grid">{cards(data.get("epidemiology", []))}</div>'}
+<h2>流行病学与疾病负担</h2>{chart_bars(data.get("epidemiology_chart", [])) if data.get("epidemiology_chart_style") == "bars" else f'<div class="grid">{cards(data.get("epidemiology", []))}</div>'}
 <h2>现有治疗格局</h2>{treatment_chart(data.get("treatment_landscape_chart", {})) or f'<div class="grid">{cards(data.get("treatment_landscape", []))}</div>'}
 <h2>TD Cowen 关键趋势</h2><div class="grid">{cards(trend_items)}</div>
 <h2>潜力药物赛马图</h2><div class="race"><div class="stage-head"><div></div><div class="stages">{''.join(f'<div>{STAGE_ZH[s]}</div>' for s in STAGES)}</div><div></div></div>{''.join(rows) or '<div class=empty>未筛选出符合规则的活跃管线</div>'}</div>

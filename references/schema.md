@@ -15,7 +15,7 @@ The extractor creates a JSON draft. Preserve its factual evidence and complete t
 - `report`: title, topic, report date, page count, input path, TD Cowen detection, and section page ranges.
 - `disease_intro`: short Chinese overview with `text` and `source_pages`.
 - `epidemiology`: 2-4 high-signal burden/prevalence/incidence facts. Each item has `text` and `source_pages`.
-- `epidemiology_chart`: optional bar-chart data for epidemiology or disease-burden metrics. Each item has `label`, `value`, `unit`, `display`, and `source_pages`.
+- `epidemiology_chart`: optional bar-chart data for epidemiology or disease-burden metrics. Use only when explicitly requested; otherwise prefer logically ordered cards. Each item has `label`, `value`, `unit`, `display`, and `source_pages`.
 - `treatment_landscape`: current standard of care, approved disease-modifying options, and major limitations.
 - `treatment_landscape_chart`: optional chart data for market size, market share, standard-of-care split, or adoption assumptions. Use `type` plus `items`.
 - `sub_indications`: major sub-indications for broad category reports; otherwise empty.
