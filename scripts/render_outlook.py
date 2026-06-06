@@ -80,6 +80,20 @@ def treatment_chart(chart):
     chart_type = chart.get("type", "bars")
     title = chart.get("title", "")
     items = chart.get("items", [])
+    if chart_type == "market_share_pie":
+        colors = ["#0f7f78", "#20b8a7", "#6ac7bd", "#a8dad6", "#ffca54", "#f29e4c", "#a6b7c0"]
+        cursor = 0
+        stops = []
+        legend = []
+        for idx, item in enumerate(items):
+            share = float(item.get("value") or 0)
+            color = item.get("color") or colors[idx % len(colors)]
+            stops.append(f"{color} {cursor:.2f}% {cursor + share:.2f}%")
+            cursor += share
+            legend.append(f'''<div class="pie-legend-row"><i style="background:{esc(color)}"></i><span>{esc(item.get("label"))}</span><b>{esc(item.get("display") or f"{share:.0f}%")}</b></div>''')
+        return f'''<div class="chart-card pie-card"><h3>{esc(title)}</h3>
+          <div class="pie-wrap"><div class="pie" style="background:conic-gradient({','.join(stops)})"><div>{esc(chart.get("center_label","2030P"))}</div></div><div class="pie-legend">{''.join(legend)}</div></div>
+          <span class="source">{esc(pages(chart.get("source_pages")))}</span></div>'''
     if chart_type == "market_share":
         rows = []
         for item in items:
@@ -91,6 +105,32 @@ def treatment_chart(chart):
             </div>''')
         return f'<div class="chart-card"><h3>{esc(title)}</h3>{''.join(rows)}<span class="source">{esc(pages(chart.get("source_pages")))}</span></div>'
     return chart_bars(items)
+
+def treatment_drug_cards(items):
+    if not items:
+        return ""
+    out = []
+    for item in items:
+        tags = "".join(f"<span>{esc(tag)}</span>" for tag in item.get("tags", []))
+        out.append(f'''<div class="drug-card">
+          <div class="drug-head"><b>{esc(item.get("name"))}</b><em>{esc(item.get("company"))}</em></div>
+          <p>{esc(item.get("role"))}</p>
+          <div class="drug-tags">{tags}</div>
+          <span class="source">{esc(pages(item.get("source_pages")))}</span>
+        </div>''')
+    return f'<div class="drug-grid">{''.join(out)}</div>'
+
+def investment_summary(items):
+    if not items:
+        return ""
+    rows = []
+    for item in items:
+        rows.append(f'''<div class="invest-card {esc(item.get("tone","neutral"))}">
+          <b>{esc(item.get("title"))}</b>
+          <p>{esc(item.get("text"))}</p>
+          <span class="source">{esc(pages(item.get("source_pages")))}</span>
+        </div>''')
+    return f'<h2>投资建议</h2><div class="invest-grid">{''.join(rows)}</div>'
 
 
 def market_cards(records):
@@ -151,6 +191,8 @@ def main():
 .chart-card{{background:white;border-radius:18px;padding:22px;box-shadow:0 7px 24px #14334b14;margin-bottom:14px}} .chart-card h3{{margin:0 0 14px;color:#0d3349;font-size:18px}}
 .bar-row{{display:grid;grid-template-columns:210px 1fr 135px 48px;gap:12px;align-items:center;margin:12px 0}} .bar-label{{font-weight:800;color:#153d50}} .bar-track,.share-track{{height:28px;background:#e7eff1;border-radius:999px;overflow:hidden}} .bar-fill,.share-fill{{height:100%;background:linear-gradient(90deg,#20b8a7,#0d746f);border-radius:999px}} .bar-value{{font-weight:900;color:#0d3349;text-align:right}}
 .share-row{{display:grid;grid-template-columns:170px 1fr 70px;gap:12px;align-items:center;margin:13px 0}} .share-row span{{font-weight:800;color:#153d50}} .share-row b{{color:#0d3349;text-align:right}}
+.pie-wrap{{display:grid;grid-template-columns:320px 1fr;gap:26px;align-items:center}} .pie{{width:290px;height:290px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px #dfeaec}} .pie div{{width:150px;height:150px;border-radius:50%;background:white;display:grid;place-items:center;text-align:center;font-weight:900;color:#0d3349;box-shadow:0 3px 12px #0d33491f}} .pie-legend-row{{display:grid;grid-template-columns:16px 1fr 60px;gap:10px;align-items:center;margin:12px 0;font-size:15px}} .pie-legend-row i{{width:14px;height:14px;border-radius:50%}} .pie-legend-row span{{font-weight:800;color:#153d50}} .pie-legend-row b{{text-align:right;color:#0d3349}}
+.drug-grid{{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}} .drug-card{{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 16px #14334b12;border-left:5px solid #ffca54}} .drug-head b{{display:block;color:#0d3349;font-size:17px}} .drug-head em{{display:block;color:#3b6b77;font-style:normal;font-weight:800;margin-top:3px}} .drug-card p{{font-size:14px;line-height:1.55;margin:10px 0;color:#29424d}} .drug-tags{{display:flex;gap:7px;flex-wrap:wrap}} .drug-tags span{{background:#e7f2f3;color:#0d746f;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900}}
 .grid{{display:grid;grid-template-columns:1fr 1fr;gap:14px}} .card,.empty{{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 16px #14334b12;border-left:5px solid #3bb7a7;min-height:90px}}
 .card p{{margin:0;font-size:16px;line-height:1.55}} .source{{display:block;margin-top:9px;color:#78909c;font-size:12px}} .intro{{font-size:18px;line-height:1.65;background:white;border-radius:16px;padding:22px;border-top:5px solid #ffca54}}
 .pillbox{{display:flex;gap:8px;flex-wrap:wrap}} .pill{{background:#d9eceb;color:#164b4d;border-radius:99px;padding:8px 12px;font-weight:700}}
@@ -162,15 +204,17 @@ def main():
 .horse strong,.horse small{{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}} .horse strong{{font-size:11px}} .horse small{{font-size:9px;color:#d9fffa}}
 .catalyst span{{display:inline-block;background:#ffca54;color:#3b2d00;border-radius:7px;padding:5px 8px;font-weight:900}} .catalyst p{{font-size:12px;line-height:1.35;margin:6px 0;color:#3c5059}} .catalyst small{{color:#82949c}}
 .quotes{{margin-top:8px;display:grid;grid-template-columns:1fr;gap:6px}} .quote{{background:#f1f7f7;border:1px solid #d7e6e8;border-radius:9px;padding:7px;font-size:11px;color:#31515d}} .quote b{{display:inline;color:#0d3349;margin-right:5px}} .quote span{{color:#607d87}} .quote p{{margin:2px 0;font-size:11px;line-height:1.2}} .quote .pos{{color:#09845f}} .quote .neg{{color:#c0392b}} .quote.error em,.quote.none{{color:#8a5a00;font-style:normal}}
+.invest-grid{{display:grid;grid-template-columns:1fr 1fr;gap:14px}} .invest-card{{background:white;border-radius:16px;padding:18px;box-shadow:0 4px 16px #14334b12;border-top:5px solid #20b8a7}} .invest-card.watch{{border-top-color:#ffca54}} .invest-card.risk{{border-top-color:#e06b5d}} .invest-card b{{color:#0d3349;font-size:17px}} .invest-card p{{line-height:1.55;margin:9px 0 0;color:#29424d;font-size:14px}}
 .footer{{margin-top:32px;background:#0d3349;color:#d8e3e8;padding:20px;border-radius:14px;font-size:13px;line-height:1.6}} .footer b{{color:#ffca54}}
 </style></head><body><main class="page"><header><div class="eyebrow">TD COWEN · THERAPEUTIC CATEGORIES OUTLOOK</div><h1>{esc(report["topic"])}</h1><div class="subtitle">疾病格局、重点管线与关键催化剂赛马图</div><div class="cutoff">研报时点<br>{esc(report["report_date"])}</div></header>
 <h2>疾病简介</h2><div class="intro">{esc(intro.get("text",""))}<span class="source">{esc(pages(intro.get("source_pages")))}</span></div>
 {f'<h2>主要子适应症</h2><div class="pillbox">{"".join(f"<span class=pill>{esc(x)}</span>" for x in sub)}</div>' if sub else ''}
 <h2>流行病学与疾病负担</h2>{chart_bars(data.get("epidemiology_chart", [])) if data.get("epidemiology_chart_style") == "bars" else f'<div class="grid">{cards(data.get("epidemiology", []))}</div>'}
-<h2>现有治疗格局</h2>{treatment_chart(data.get("treatment_landscape_chart", {})) or f'<div class="grid">{cards(data.get("treatment_landscape", []))}</div>'}
+<h2>现有治疗格局</h2>{treatment_chart(data.get("treatment_landscape_chart", {})) or f'<div class="grid">{cards(data.get("treatment_landscape", []))}</div>'}{treatment_drug_cards(data.get("treatment_drug_cards", []))}
 <h2>TD Cowen 关键趋势</h2><div class="grid">{cards(trend_items)}</div>
 <h2>潜力药物赛马图</h2><div class="race"><div class="stage-head"><div></div><div class="stages">{''.join(f'<div>{STAGE_ZH[s]}</div>' for s in STAGES)}</div><div></div></div>{''.join(rows) or '<div class=empty>未筛选出符合规则的活跃管线</div>'}</div>
 <h2>关键风险</h2><div class="grid">{cards(risks)}</div>
+{investment_summary(data.get("investment_summary", []))}
 <div class="footer"><b>口径说明：</b>疾病、治疗格局与Catalyst仅使用 TD Cowen 研报原文，所有研报事件均以 {esc(report["report_date"])} 为信息时点，不联网更新。公司行情来自 Futu OpenAPI 当前快照，与研报时点不同。潜力项目代表 Cowen 重点关注度与明确催化剂，不代表独立成功率判断。<br><b>来源页：</b>{esc(pages(data.get("sources", {}).get("pages")))}</div>
 </main></body></html>'''
     output = Path(args.output).resolve() if args.output else source.with_suffix(".html")

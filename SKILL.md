@@ -19,7 +19,8 @@ description: 将 TD Cowen / TD Securities Therapeutic Categories Outlook 系列 
    - Chinese is mandatory for `disease_intro`, `epidemiology`, `treatment_landscape`, `key_trends`, `risks`, `cowen_view`, `key_data`, and `catalyst`.
    - Keep drug names, company names, trial names, mechanism abbreviations, regulatory abbreviations, and explicit timing expressions in English where appropriate.
    - For epidemiology, default to a logical card sequence: patient scale, demographic driver, prevalence gradient, economic burden, and risk factors. Use `epidemiology_chart` only when the user explicitly asks for numeric bars.
-   - For treatment landscape charts, fill `treatment_landscape_chart` when market share, market size, or adoption assumptions are available.
+   - For treatment landscape, use a pie/donut chart for market share when available and write current/marketed therapies as `treatment_drug_cards`.
+   - When the user asks for investment advice or when the output would benefit from a bottom-line view, add `investment_summary` as research tracking cards. Do not write direct buy/sell instructions.
    - When the user asks for current company market data, use `scripts/fetch_futu_market_data.py` and store results under candidate `market_data`. Keep quote time and Futu source visible because this data is current, unlike the report cutoff.
    - For broad reports containing multiple sub-indications, summarize the major sub-indications in `sub_indications`, then select candidates across them.
    - If a broad report has no consolidated `R&D Pipeline` table, use the detected `sub_indications` as search anchors and build `pipeline_candidates` from explicit body evidence before selecting 5-6 projects.

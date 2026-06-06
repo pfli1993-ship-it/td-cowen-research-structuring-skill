@@ -18,11 +18,13 @@ The extractor creates a JSON draft. Preserve its factual evidence and complete t
 - `epidemiology_chart`: optional bar-chart data for epidemiology or disease-burden metrics. Use only when explicitly requested; otherwise prefer logically ordered cards. Each item has `label`, `value`, `unit`, `display`, and `source_pages`.
 - `treatment_landscape`: current standard of care, approved disease-modifying options, and major limitations.
 - `treatment_landscape_chart`: optional chart data for market size, market share, standard-of-care split, or adoption assumptions. Use `type` plus `items`.
+- `treatment_drug_cards`: optional cards for current marketed or standard-of-care therapies. Each card has `name`, `company`, `role`, `tags`, and `source_pages`.
 - `sub_indications`: major sub-indications for broad category reports; otherwise empty.
 - `key_trends`: 3-5 Cowen trends, each with `text` and `source_pages`.
 - `pipeline_candidates`: deterministic candidate universe extracted from the R&D Pipeline and body.
 - `selected_candidates`: 5-6 candidates copied from `pipeline_candidates` and editorially refined.
 - `risks`: 2-4 report-supported scientific, clinical, regulatory, access, or commercial risks.
+- `investment_summary`: optional research-view cards placed near the end of the long image. Each item has `tone` (`positive`, `watch`, `risk`, or `neutral`), `title`, `text`, and `source_pages`. Keep wording as research tracking guidance, not trade instructions.
 - `sources`: source note and relevant page list.
 
 ## Candidate
